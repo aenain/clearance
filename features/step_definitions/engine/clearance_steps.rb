@@ -64,7 +64,7 @@ end
 Then /^instructions for changing my password are emailed to "(.*)"$/ do |email|
   page.should have_content("instructions for changing your password")
 
-  user = User.find_by_email!(email)
+  user = User.find_by!(email: email)
   assert !user.confirmation_token.blank?
   assert !ActionMailer::Base.deliveries.empty?
   result = ActionMailer::Base.deliveries.any? do |email|
@@ -76,13 +76,13 @@ Then /^instructions for changing my password are emailed to "(.*)"$/ do |email|
 end
 
 When /^I follow the password reset link sent to "(.*)"$/ do |email|
-  user = User.find_by_email!(email)
+  user = User.find_by!(email: email)
   visit edit_user_password_path(:user_id => user,
                                 :token   => user.confirmation_token)
 end
 
 When /^I change the password of "(.*)" without token$/ do |email|
-  user = User.find_by_email!(email)
+  user = User.find_by!(email: email)
   visit edit_user_password_path(:user_id => user)
 end
 
